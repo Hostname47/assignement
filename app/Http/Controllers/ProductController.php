@@ -7,7 +7,16 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function add(Request $request) {
+
+    public function index(Request $request) {
+
+    }
+
+    public function view(Request $request) {
+
+    }
+
+    public function create(Request $request) {
         Product::create($this->validateData($request));
     }
 
