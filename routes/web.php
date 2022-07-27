@@ -18,3 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::post('/products', [ProductController::class, 'add'])->name('add-product');
+Route::patch('/products', [ProductController::class, 'update'])->name('update-product');

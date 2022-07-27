@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->decimal('price', 9, 3);
+            $table->unsignedDecimal('price', 9, 3);
             $table->longText('description');
             $table->longText('image'); // store the path
         });
