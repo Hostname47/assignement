@@ -7,7 +7,6 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-
     public function index(Request $request) {
 
     }
@@ -17,15 +16,37 @@ class ProductController extends Controller
     }
 
     public function create(Request $request) {
-        Product::create($this->validateData($request));
+        $data = $request->validate([
+            'name'=>'required|min:25|max:800',
+            'price'=>'required|numeric|between:0,999999.99',
+            'description'=>'required|max:4000',
+            'image'=>'required|max:2000'
+        ]);
+
+        $product = Product::create($data);
+        
+        if($request->has('categories')) {
+            $categories = $this->validateCategories($request);
+            $product->categories()->syncWithoutDetaching($categories);
+        }
     }
 
     public function update(Request $request) {
-        $data = $this->validateData($request);
+        $data = $request->validate([
+            'name'=>'sometimes|min:25|max:800',
+            'price'=>'sometimes|numeric|between:0,999999.99',
+            'description'=>'sometimes|max:4000',
+            'image'=>'sometimes|max:2000'
+        ]);
         $productId = $this->validateProductId($request);
 
         $product = Product::find($productId);
         $product->update($data);
+
+        if($request->has('categories')) {
+            $categories = $this->validateCategories($request);
+            $product->categories()->sync($categories);
+        }
     }
 
     public function delete(Request $request) {
@@ -33,13 +54,11 @@ class ProductController extends Controller
         Product::find($productId)->delete();
     }
 
-    private function validateData($request) {
+    private function validateCategories($request) {
         return $request->validate([
-            'name'=>'required|min:25|max:800',
-            'price'=>'required|numeric|between:0,999999.99',
-            'description'=>'sometimes|max:4000',
-            'image'=>'sometimes|max:2000'
-        ]);
+            'categories'=>'required|array',
+            'categories.*'=>'exists:categories,id'
+        ])['categories'];
     }
 
     private function validateProductId($request) {

@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\Product;
+use App\Models\{Product, Category};
 
 class ProductTest extends TestCase
 {
@@ -57,6 +57,27 @@ class ProductTest extends TestCase
         $this->assertEquals(199, $product->price);
         $this->assertEquals('The Stoeger® STR-10 Semi-Auto Pistol description.', $product->description);
         $this->assertEquals('str-10.png', $product->image);
+    }
+
+    /** @test */
+    public function edit_product_categories() {
+        $this->withoutExceptionHandling();
+        $category0 = Category::create(['name'=>'Snipers']);
+        $category1 = Category::create(['name'=>'Nuclear Weapons']);
+
+        $this->post('/products', [
+            'name' => 'U.S. Army Staff Sergeant Adelbert Waldron',
+            'price' => 1444.99,
+            'description' => 'U.S. Army Staff Sergeant Adelbert Waldron description',
+            'image' => '/snipers/985/snp.png',
+            'categories' => [$category0->id]
+        ]);
+
+        $product = Product::first();
+        $this->assertEquals($category0->id, $product->categories->first()->id);
+        $this->patch('/products', ['product_id' => $product->id, 'categories' => [$category1->id]]);
+        $this->assertEquals($category1->id, $product->refresh()->categories->first()->id);
+
     }
 
     /** @test */

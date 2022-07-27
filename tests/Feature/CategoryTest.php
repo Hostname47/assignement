@@ -41,4 +41,32 @@ class CategoryTest extends TestCase
         $this->delete('/categories', [ 'category_id'=>$category->id ]);
         $this->assertCount(0, Category::all());
     }
+
+    /** @test */
+    public function a_category_can_have_many_products() {
+        $category0 = Category::create(['name'=>'Snipers']);
+        $category1 = Category::create(['name'=>'Nuclear Weapons']);
+
+        /**
+         * Here we'll create some products that share the same category (category0)
+         */
+        $this->post('/products', [
+            'name' => 'U.S. Army Staff Sergeant Adelbert Waldron',
+            'price' => 1444.99,
+            'description' => 'U.S. Army Staff Sergeant Adelbert Waldron description',
+            'image' => '/snipers/985/snp.png',
+            'categories' => [$category0->id]
+        ]);
+
+        $this->post('/products', [
+            'name' => 'Red Army Captain Vasily Zaytsev',
+            'price' => 3899.99,
+            'description' => 'Red Army Captain Vasily Zaytsev description',
+            'image' => '/snipers/54/snp.png',
+            'categories' => [$category0->id, $category1->id]
+        ]);
+
+        $this->assertCount(2, $category0->products);
+        $this->assertCount(1, $category1->products);
+    }
 }
