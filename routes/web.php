@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 Route::post('/products', [ProductController::class, 'add'])->name('add-product');
 Route::patch('/products', [ProductController::class, 'update'])->name('update-product');
+Route::delete('/products', [ProductController::class, 'delete'])->name('delete-product');

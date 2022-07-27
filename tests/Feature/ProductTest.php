@@ -11,6 +11,11 @@ class ProductTest extends TestCase
 {
     use DatabaseTransactions;
 
+    /**
+     * I can add more test covergae by testing validation, security and different use cases,
+     * but let's keep this as simple as possible
+     */
+
     /** @test */
     public function add_a_product() {
         $this->assertCount(0, Product::all());
@@ -52,5 +57,14 @@ class ProductTest extends TestCase
         $this->assertEquals(199, $product->price);
         $this->assertEquals('The Stoeger® STR-10 Semi-Auto Pistol description.', $product->description);
         $this->assertEquals('str-10.png', $product->image);
+    }
+
+    /** @test */
+    public function delete_a_product() {
+        $product = Product::factory()->create();
+
+        $this->assertCount(1, Product::all());
+        $this->delete('/products', [ 'product_id'=>$product->id ]);
+        $this->assertCount(0, Product::all());
     }
 }
