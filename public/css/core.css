@@ -13,6 +13,10 @@ h1 {
     
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .align-center {
     display: flex;
     align-items: center;
@@ -119,4 +123,48 @@ header {
 
 .red-message {
     color: rgb(121, 22, 22);
+}
+
+.my8 {
+    margin: 8px 0;
+}
+
+#products-box {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.product-component {
+    border: 1px solid gainsboro;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    max-width: 200px;
+}
+
+.product-component .image-container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gainsboro;
+}
+
+.product-component .meta-box {
+    padding: 8px;
+}
+
+.product-component .title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.product-component .description {
+    font-size: 13px;
+}
+
+.product-component .price {
+    font-size: 14px;
+    font-weight: bold;
 }

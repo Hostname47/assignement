@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function view(Request $request) {
         $categoryId = $request->validate(['category'=>'required|exists:categories,id'])['category'];
         $category = Category::find($categoryId);
-        $products = $category->products()->paginate(16);
+        $products = $category->products;
 
         return view('categories.view')
             ->with(compact('category'))

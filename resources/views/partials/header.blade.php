@@ -8,6 +8,6 @@
         <a href="{{ route('home') }}" class="button">Home</a>
         <a href="" class="button">Products</a>
         <a href="{{ route('categories') }}" class="button">Categories</a>
-        <a href="" class="button">About</a>
+        <a href="{{ route('about') }}" class="button">About</a>
     </div>
 </header>

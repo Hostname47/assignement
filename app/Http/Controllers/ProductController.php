@@ -4,23 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\{Product, Category};
 
 class ProductController extends Controller
 {
     protected $imageMimes = 'jpeg,png,jpg,gif,svg,jfif,bmp,tiff'; // images
 
     public function index(Request $request) {
-
+        $products = Product::paginate(18);
+        
+        return view('products.index')
+            ->with(compact('products'));
     }
 
     public function view(Request $request) {
         
     }
 
+    public function add(Request $request) {
+        $categories = Category::all();
+        return view('products.add')
+            ->with(compact('categories'));
+    }
+
     public function create(Request $request) {
         $data = $request->validate([
-            'name'=>'required|min:25|max:800',
+            'name'=>'required|max:800',
             'price'=>'required|numeric|between:0,999999.99',
             'description'=>'required|max:4000',
         ]);
@@ -37,6 +46,8 @@ class ProductController extends Controller
             $categories = $this->validateCategories($request);
             $product->categories()->syncWithoutDetaching($categories);
         }
+
+        return redirect()->route('products')->with('message', 'Product has been created successfully');
     }
 
     public function edit(Request $request) {

@@ -17,8 +17,6 @@
     </div>
     @endforeach
 
-    <!-- pagination here -->
-
     @if(!$products->count())
     <p class="fs13">There's no products associated to this category go to products section in header and select add a product to start creating new products.</p>
     @endif
