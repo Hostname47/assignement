@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
+    protected $imageMimes = 'jpeg,png,jpg,gif,svg,jfif,bmp,tiff'; // images
+
     public function index(Request $request) {
 
     }
 
     public function view(Request $request) {
-
+        
     }
 
     public function create(Request $request) {
@@ -20,10 +23,15 @@ class ProductController extends Controller
             'name'=>'required|min:25|max:800',
             'price'=>'required|numeric|between:0,999999.99',
             'description'=>'required|max:4000',
-            'image'=>'required|max:2000'
         ]);
 
         $product = Product::create($data);
+
+        // Store the image if exists
+        if($request->has('image')) {
+            $image = $request->validate(['image'=>"mimes:$this->imageMimes|max:8000"])['image'];
+            $image->storeAs("products/$product->id/images", "$product->id-image.png", 'public');
+        }
         
         if($request->has('categories')) {
             $categories = $this->validateCategories($request);
@@ -31,17 +39,26 @@ class ProductController extends Controller
         }
     }
 
+    public function edit(Request $request) {
+        
+    }
+
     public function update(Request $request) {
         $data = $request->validate([
             'name'=>'sometimes|min:25|max:800',
             'price'=>'sometimes|numeric|between:0,999999.99',
             'description'=>'sometimes|max:4000',
-            'image'=>'sometimes|max:2000'
         ]);
         $productId = $this->validateProductId($request);
 
         $product = Product::find($productId);
         $product->update($data);
+
+        // Update the image if admin change the product's image
+        if($request->has('image')) {
+            $image = $request->validate(['image'=>"mimes:$this->imageMimes|max:8000"])['image'];
+            $image->storeAs("products/$product->id/images", "$product->id-image.png", 'public');
+        }
 
         if($request->has('categories')) {
             $categories = $this->validateCategories($request);
@@ -50,6 +67,10 @@ class ProductController extends Controller
     }
 
     public function delete(Request $request) {
+
+    }
+
+    public function destroy(Request $request) {
         $productId = $this->validateProductId($request);
         Product::find($productId)->delete();
     }

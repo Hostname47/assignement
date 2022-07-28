@@ -1,0 +1,122 @@
+body {
+    margin: 55px 0 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    color: rgb(0, 174, 255);
+    
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    background-color: rgb(15, 15, 15);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 55px;
+    width: 100%;
+    padding: 0 26px;
+}
+
+#header-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    user-select: none;
+}
+
+#header-menu {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    text-decoration: none;
+    margin-left: 46px;
+}
+
+#header-menu .button {
+    text-decoration: none;
+    color: rgb(224, 224, 224);
+    font-size: 13px;
+}
+#header-menu .button:hover {
+    color: white;
+}
+
+#left-panel {
+    width: 256px;
+    height: calc(100% - 55px);
+    position: absolute;
+    left: 0;
+    top: 55px;
+    border-right: 1px solid gainsboro;
+}
+
+#left-panel {
+    padding: 14px;
+}
+
+#left-panel h2 {
+    margin: 0;
+    font-size: 17px;
+    color: rgb(22, 22, 22);
+}
+
+#left-panel .category {
+    margin: 10px 0 10px 16px;
+}
+
+.category .link {
+    display: flex;
+    margin-bottom: 4px;
+    color: rgb(0, 174, 255);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.fs13 {
+    font-size: 13px;
+}
+
+.black-link {
+    color: rgb(15, 15, 15);
+    text-decoration: none;
+}
+.black-link:hover {
+    text-decoration: underline;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.green-message {
+    color: #1ea41e;
+}
+
+.red-message {
+    color: rgb(121, 22, 22);
+}

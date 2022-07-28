@@ -18,7 +18,8 @@ return new class extends Migration
             $table->text('name');
             $table->unsignedDecimal('price', 9, 3);
             $table->longText('description');
-            $table->longText('image'); // store the path
+            // Product image will be stored in a storage folder (we use the product id to get the image)
+            $table->timestamps();
         });
     }
 

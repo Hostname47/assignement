@@ -5,11 +5,24 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use App\Models\{Product, Category};
 
 class ProductTest extends TestCase
 {
     use DatabaseTransactions;
+
+    public function setUp(): void {
+        parent::setUp();
+        (new Filesystem)->cleanDirectory(storage_path('app/framework/testing/disks'));
+    }
+
+    public function tearDown():void {
+        (new Filesystem)->cleanDirectory(storage_path('app/framework/testing/disks'));
+        parent::tearDown();
+    }
 
     /**
      * I can add more test covergae by testing validation, security and different use cases,
@@ -18,14 +31,23 @@ class ProductTest extends TestCase
 
     /** @test */
     public function add_a_product() {
+        $this->withoutExceptionHandling();
+
         $this->assertCount(0, Product::all());
+
+        // Fake an image
+        Storage::fake('public');
+        $image = UploadedFile::fake()->image('pistol.png', 30, 80)->size(200);
+
         $this->post('/products', [
             'name'=>'Stoeger STR-9 Semi-Auto Pistol - 9mm',
             'price'=>255.65,
             'description'=>"The Stoeger® STR-9 Semi-Auto Pistol utilizes a striker-fired mechanism and outstanding ergonomics to deliver rapid shots with unfailing reliability. The polymer frame features aggressive texturing, thumb groves, and an under-cut trigger guard to provide a non-slip hold and position the shooter's hand close to the bore axis for enhanced control and quick follow-up shots.",
-            'image'=>'str-8.png'
+            'image'=>$image
         ]);
         $this->assertCount(1, Product::all());
+        $product = Product::first();
+        $this->assertTrue(Storage::disk('public')->has("/products/$product->id/images/$product->id-image.png"));
     }
 
     /** @test */
@@ -36,27 +58,23 @@ class ProductTest extends TestCase
             'name'=>'Stoeger STR-9 Semi-Auto Pistol - 9mm',
             'price'=>255.65,
             'description'=>"The Stoeger® STR-9 Semi-Auto Pistol description.",
-            'image'=>'str-8.png'
         ]);
 
         $this->assertEquals('Stoeger STR-9 Semi-Auto Pistol - 9mm', $product->name);
         $this->assertEquals(255.65, $product->price);
         $this->assertEquals('The Stoeger® STR-9 Semi-Auto Pistol description.', $product->description);
-        $this->assertEquals('str-8.png', $product->image);
 
         $this->patch('/products', [
             'product_id'=>$product->id,
             'name'=>'Stoeger STR-10 Semi-Auto Pistol - 10mm',
             'price'=>199,
             'description'=>"The Stoeger® STR-10 Semi-Auto Pistol description.",
-            'image'=>'str-10.png'
         ]);
 
         $product->refresh();
         $this->assertEquals('Stoeger STR-10 Semi-Auto Pistol - 10mm', $product->name);
         $this->assertEquals(199, $product->price);
         $this->assertEquals('The Stoeger® STR-10 Semi-Auto Pistol description.', $product->description);
-        $this->assertEquals('str-10.png', $product->image);
     }
 
     /** @test */
@@ -69,7 +87,6 @@ class ProductTest extends TestCase
             'name' => 'U.S. Army Staff Sergeant Adelbert Waldron',
             'price' => 1444.99,
             'description' => 'U.S. Army Staff Sergeant Adelbert Waldron description',
-            'image' => '/snipers/985/snp.png',
             'categories' => [$category0->id]
         ]);
 

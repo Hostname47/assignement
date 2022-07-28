@@ -54,7 +54,6 @@ class CategoryTest extends TestCase
             'name' => 'U.S. Army Staff Sergeant Adelbert Waldron',
             'price' => 1444.99,
             'description' => 'U.S. Army Staff Sergeant Adelbert Waldron description',
-            'image' => '/snipers/985/snp.png',
             'categories' => [$category0->id]
         ]);
 
@@ -62,7 +61,6 @@ class CategoryTest extends TestCase
             'name' => 'Red Army Captain Vasily Zaytsev',
             'price' => 3899.99,
             'description' => 'Red Army Captain Vasily Zaytsev description',
-            'image' => '/snipers/54/snp.png',
             'categories' => [$category0->id, $category1->id]
         ]);
 
